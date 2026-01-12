@@ -1,0 +1,30 @@
+name: Hello World Workflow
+
+# 触发条件：push代码到main分支、手动触发
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+# 任务定义
+jobs:
+  # 第一个任务：打印欢迎信息
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print hello message
+        run: echo "Hello, GitHub Actions! This is a test workflow."
+
+  # 第二个任务：检查系统信息（依赖第一个任务完成）
+  system-info:
+    needs: greet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show OS version
+        run: cat /etc/os-release
+
+      - name: Show CPU info
+        run: lscpu | head -n 10
